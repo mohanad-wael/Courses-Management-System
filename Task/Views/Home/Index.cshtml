@@ -1,0 +1,96 @@
+﻿@using Task.ModelViews
+@model AddStudentModelView
+
+@{
+    ViewData["Title"] = "Add Students ";
+}
+
+<h2>Hello, Choose Your Course With Your Favourite Teacher.</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Course Name</th>
+            <th>Teacher Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model.Students)
+        {
+            <tr>
+                @foreach (var it in student.StudentTeacher)
+                {
+                    <td>@student.Name</td>
+                    <td>@it.Teacher.Course.Name</td>
+                    <td>@it.Teacher.Name</td>
+                }
+              
+                
+            </tr>
+        }
+
+        <!-- Row for adding a new student -->
+        <tr>
+            <form asp-action="Add" method="post">
+            <td>
+                <input type="text" name="StudentName" class="form-control" placeholder="Enter student name" required />
+            </td>
+            <td>
+                <select id="courseDropdown" name="SelectedCourseId" class="form-control" required>
+                    <option value="">Select a course</option>
+                        @foreach (var course in Model.Courses)
+                        {
+                        <option value="@course.Id">@course.Name</option>
+                        }
+                </select>
+            </td>
+            <td>
+                <select id="teacherDropdown" name="SelectedTeacherId" class="form-control" required>
+                    <option value="">Select a teacher</option>
+                    <!-- Teachers will be populated dynamically -->
+                </select>
+            </td>
+            <td>
+                <button type="submit" class="btn btn-primary">Add Student</button>
+            </td>
+            </form>
+        </tr>
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Event handler for course dropdown change
+            $('#courseDropdown').change(function () {
+                var courseId = $(this).val();
+
+                if (courseId) {
+                    // AJAX call to get teachers based on the selected course
+                    $.ajax({
+                        url: '/Home/GetTeachersByCourse',
+                        type: 'GET',
+                        data: { courseId: courseId },
+                        success: function (data) {
+                            var teacherDropdown = $('#teacherDropdown');
+                            teacherDropdown.empty(); // Clear the current options
+
+                            teacherDropdown.append('<option value="">Select a teacher</option>');
+                            $.each(data, function (index, teacher) {
+                                teacherDropdown.append('<option value="' + teacher.id + '">' + teacher.name + '</option>');
+                            });
+                        },
+                        error: function () {
+                            alert('Error loading teachers. Please try again.');
+                        }
+                    });
+                } else {
+                    $('#teacherDropdown').empty().append('<option value="">Select a teacher</option>'); // Clear teacher dropdown
+                }
+            });
+        });
+    </script>
+}

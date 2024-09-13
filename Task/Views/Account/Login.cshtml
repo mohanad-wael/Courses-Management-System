@@ -1,0 +1,45 @@
+﻿@using Task.ModelViews
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+<div class="row h-100 d-flex justify-content-center mt-5 mx-2">
+	<div class="card border-info rounded-4 overflow-hidden col-lg-5 col-md-6 ">
+		<h1 class="text-center mt-2">Login</h1>
+		<hr />
+		<form asp-action="Login">
+			<div asp-validation-summary="All" class="text-danger"></div>
+
+			<div class="form-group mb-3">
+				<label asp-for="Email" class="control-label"></label>
+				<div class="input-group">
+					<i class="bi bi-envelope icon input-group-text"></i>
+					<input asp-for="Email" class="form-control" />
+				</div>
+				<span asp-validation-for="Email" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="Password" class="control-label"></label>
+				<div class="input-group">
+					<i class="bi bi-lock icon input-group-text"></i>
+					<input asp-for="Password" class="form-control" />
+				</div>
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			<div class="form-group form-check mb-5">
+				<label class="form-check-label">
+					<input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+				</label>
+			</div>
+			<div class="form-group d-flex justify-content-between mb-3">
+				<a asp-action="Registration" asp-controller="Account" class="btn btn-outline-primary register-button">Register</a>
+				<input type="submit" value="Login" class="btn btn-outline-light" />
+			</div>
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

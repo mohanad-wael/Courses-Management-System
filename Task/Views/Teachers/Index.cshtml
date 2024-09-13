@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Teacher>
+@{
+    ViewData["Title"] = "Teachers Page";
+}
+
+<a class="btn btn-primary btn-lg" asp-controller="Teachers" asp-action="Create"> <i class="bi bi-journal-plus"></i> Add Teacher</a>
+@if (Model.Count() == 0)
+{
+
+
+    <div class="alert  alert-warning mt-5">
+        <h4 class="alert-heading">Warning!</h4>
+        <p class="mb-0">No Teachers Yet :)</p>
+    </div>
+}
+<div class="row mt-5 gap-2">
+    @foreach (var item in Model)
+    {
+        <div class="card col-md-3 ">
+            <div class="card-body">
+                <div class="row gap-2 " style="display: flex;align-items: center;justify-content: space-between;">
+                    <h4 class="card-title" style="width: fit-content;">@item.Name  </h4>
+                    <div class="row gap-1 col-2 ">
+                        <div class="d-flex justify-content-end">
+                            <a class="btn btn-info rounded rounded-3 me-2" asp-action="Create" asp-route-id="@item.Id">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <a  class="btn btn-danger rounded rounded-3 js-delete" asp-action="Delete" asp-route-id="@item.Id" >
+                                <i class="bi bi-trash3"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                    <h6 class="card-subtitle mb-2 text-muted">@item.Course.Name</h6>
+              
+
+
+
+            </div>
+        </div>
+    }
+</div>
